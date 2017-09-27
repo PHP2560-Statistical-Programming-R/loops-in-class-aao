@@ -169,7 +169,8 @@ if (x[1]=x[5]){
 ```{r}
 x <- bubblesort(sample(1:6, size=5, replace=T))
 
-if (x[1]==x[5]){
+Type<-function(x){
+  if (x[1]==x[5]){
   hand="Yahtzee"
 } else if (x[1]==x[4] | x[2]==x[5]) {
     hand="4ofKind"
@@ -182,8 +183,10 @@ hand="smallstraight"
 hand="largestraight"
 }else 
 {hand="Chance"}
-x
-hand
+  return(hand)
+}
+Type(x)
+
 ```
 
 The above code lays this out for Yahtzee and 4 of a kind. Find statements that work for the rest. Make sets of x and test them to make sure they work.
