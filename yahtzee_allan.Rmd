@@ -202,10 +202,11 @@ Chance            .6326
 
 ```{r}
 library(dplyr)
-df = data.frame(gameplay=replicate(100000,getYahtzeeType(sample(1:6, size=5, replace=T))))
-df%>%
-  group_by(gameplay)%>%
-  summarise(count=n(),sum=sum(count))
+df = data.frame(Hand=replicate(100000,getYahtzeeType(sample(1:6, size=5, replace=T))))%>%
+  group_by(Hand)%>%
+  summarise(Probability=n()/100000)
+
+df
 
 
 ```
