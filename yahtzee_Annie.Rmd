@@ -177,7 +177,7 @@ Type<-function(x){
 }else if ((x[1]==x[3]&x[4]!=x[5])|x[2]==x[4]|(x[3]==x[5]&x[1]!=x[2])) {
 hand="3ofKind"
 }else if ((x[1]==x[3]&x[4]==x[5])|(x[3]==x[5]&x[1]==x[2])){
-hand="FullHouse"}else if ((x[1]+1==x[2]&x[2]+1==x[3]&x[3]+1==x[4]&x[4]==x[5])|(x[1]==x[2]&x[2]+1==x[3]&x[3]+1==x[4]&x[4]+1==x[5])){
+hand="FullHouse"}else if ((x[1]+1==x[2]&x[2]+1==x[3]&x[3]+1==x[4]&x[4]+1!=x[5])|(x[1]+1!=x[2]&x[2]+1==x[3]&x[3]+1==x[4]&x[4]+1==x[5])){
 hand="smallstraight"
 }else if (x[1]+1==x[2]&x[2]+1==x[3]&x[3]+1==x[4]&x[4]+1==x[5]){
 hand="largestraight"
