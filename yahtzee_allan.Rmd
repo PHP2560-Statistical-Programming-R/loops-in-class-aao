@@ -168,6 +168,7 @@ getYahtzeeType=function(x){
       hand="largestraight"
     }else 
     {hand="Chance"}
+  #print(hand)
   return(hand)
 }
 x <- bubblesort(sample(1:6, size=5, replace=T))
@@ -199,6 +200,15 @@ Small Straight    .1235
 Chance            .6326
 -------------------------------------------------------
 
+```{r}
+library(dplyr)
+df = data.frame(gameplay=replicate(100000,getYahtzeeType(sample(1:6, size=5, replace=T))))
+df%>%
+  group_by(gameplay)%>%
+  summarise(count=n(),sum=sum(count))
+
+
+```
 
 
 ## Part II: PHP 2560 Only
