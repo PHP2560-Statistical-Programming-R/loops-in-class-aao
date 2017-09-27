@@ -194,6 +194,7 @@ Chance            .6326
 -------------------------------------------------------
 
 ```{r}
+library(dplyr)
 check_probability <- function(n) {
   x <- matrix(NA, nrow=n, ncol=5)
   outcome <- rep(NA, n)
@@ -201,7 +202,10 @@ check_probability <- function(n) {
     x[i, ] <- bubblesort(sample(1:6, size=5, replace=T))
     outcome[i] <- hand(x[i, ])
   }
-  return(table(outcome)/n)
+  df <- data.frame(Hand=outcome) %>%
+    group_by(Hand) %>%
+    summarise(Probability=n()/n)
+  return(df)  
 }
 
 ```

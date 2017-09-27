@@ -1,6 +1,6 @@
 ---
 title: "Loops and basic functions"
-author: ""
+author: "Annie, Allan, Ozan"
 date: "September 27, 2017"
 output: html_document
 ---
@@ -42,7 +42,7 @@ sample(1:6, size=1, replace=T)
 Using a loop create a matrix of 10 rolls all consisting of 5 dice in each roll. 
 
 ```{r}
-x <- matrix(, nrow=10, ncol=5)
+x <- matrix(NA, nrow=10, ncol=5)
 for (i in 1:10)
   {
   x[i,] <- sample(1:6, size=5, replace=T)
@@ -70,30 +70,36 @@ x
 ```
 We will need to sort this. The following function is called a *Bubble Sort*. Comment on every part of the code to explain what it is doing:
 
-```
-bubble_sort = function(vec) {
-    no_passes = 0
-    while(1) {
-        no_swaps = 0
-        for (j in 1 : (length(vec) - 1 - no_passes)) {
-            if (vec[j] > vec[j + 1]) {
-                s = vec[j]
-                vec[j] = vec[j+1]
-                vec[j+1] = s
-                no_swaps = no_swaps + 1
-            }
-        }
-        no_passes = no_passes + 1
-        if(no_swaps == 0) break
+```{r}
+bubblesort <- function(x) {
+  # x is initially the input vector and will be
+  # modified to form the output
+  if (length(x) < 2) return (x)
+  # last is the last element to compare with
+  for(last in length(x):2) {
+    for(first in 1:(last - 1)) {
+      if(x[first] > x[first + 1]) { # swap the pair
+        save <- x[first]
+        x[first] <- x[first + 1]
+        x[first + 1] <- save
+      }
     }
-    vec
+  }
+  return (x)
 }
+
 ```
 
 ### Problem 3: Applying the Sort with dice rolls
 
 Apply Bubble sort to each row of your matrix to sort the data. (You may wish to do this within your loop so the rows are sorted as they get added.) 
 
+```{r}
+for(i in 1:nrow(x)) {
+  x[i, ] <- bubblesort(x[i, ])
+}
+x
+```
 
 
 ### Problem 4: Looking for Yahtzee Combinations
@@ -143,7 +149,30 @@ if (x[1]=x[5]){
 
 The above code lays this out for Yahtzee and 4 of a kind. Find statements that work for the rest. Make sets of x and test them to make sure they work.
 
+```{r}
+a <- bubblesort(sample(1:6, size=5, replace=T))
 
+hand <- function(k) {
+  if(k[1]==k[5]) {
+    hand <- "Yahtzee"
+  } else if(k[1]==k[4] | k[2]==k[5]) {
+    hand <- "4ofKind"
+  } else if((k[1]==k[3] & k[4]==k[5]) | (k[3]==k[5] & k[1]==k[2]) ) {
+    hand <- "FullHouse"
+  } else if(k[2]==k[4] | k[1]==k[3] | k[3]==k[5]) {
+    hand <- "3ofKind"
+  } else if(k[2]==k[1]+1 & k[3]==k[2]+1 & k[4]==k[3]+1 & k[5]==k[4]+1) {
+    hand <- "LargeStraight"
+  } else if((k[2]==x[1]+1 & k[3]==k[2]+1 & k[4]==k[3]+1) | (k[3]==k[2]+1 & k[4]==k[3]+1 & k[5]==k[4]+1)) {
+    # | x == c(1,2,2,3,4) | x == c(1,2,3,3,4) | x == c(2,3,3,4,5) | x == c(2,3,4,4,5) | x == c(3,4,4,5,6) | x == c(3,4,5,5,6) 
+    hand <- "SmallStraight"
+  } else {
+    hand <- "Chance"
+  }
+  return(hand)
+}
+
+```
 
 ### Problem 5: Simulating 100,000 dice rolls
 
@@ -167,7 +196,26 @@ Small Straight    .1235
 Chance            .6326
 -------------------------------------------------------
 
+```{r}
+library(dplyr)
+check_probability <- function(n) {
+  x <- matrix(NA, nrow=n, ncol=5)
+  outcome <- rep(NA, n)
+  for (i in 1:n) {
+    x[i, ] <- bubblesort(sample(1:6, size=5, replace=T))
+    outcome[i] <- hand(x[i, ])
+  }
+  df <- data.frame(Hand=outcome) %>%
+    group_by(Hand) %>%
+    summarise(Probability=n()/n)
+  return(df)  
+}
 
+```
+
+```{r}
+check_probability(100000)
+```
 
 ## Part II: PHP 2560 Only
 
