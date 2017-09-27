@@ -185,6 +185,7 @@ hand="largestraight"
 {hand="Chance"}
   return(hand)
 }
+x
 Type(x)
 
 ```
@@ -215,6 +216,14 @@ Small Straight    .1235
 Chance            .6326
 -------------------------------------------------------
 
+```{r}
+RepeatGame<-data.frame(Hand=replicate(100000,{x <- bubblesort(sample(1:6,size=5,replace=T))
+Type(x)}))
+install.packages("dplyr")
+library(dplyr)
+ProbTable<-RepeatGame%>%group_by(Hand)%>%summarise(Probability=n()/100000)
+ProbTable
+```
 
 
 ## Part II: PHP 2560 Only
